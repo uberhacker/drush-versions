@@ -11,6 +11,9 @@ $ drush-versions/drush-versions
 ## Usage:
 
 **drush5** - Use for Drupal 6 sites
+
 **drush6** - Use for stubborn Drupal 7 sites
+
 **drush7** - Use for well-behaved Drupal 7 sites
+
 **drush8** - Use for Drupal 8 sites
