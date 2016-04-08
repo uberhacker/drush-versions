@@ -1,0 +1,77 @@
+#!/bin/bash
+cd
+PHP=$(which php)
+if [ $? == 1 ]; then
+  sudo apt-get install php5-cli -y
+fi
+CURL=$(which curl)
+if [ $? == 1 ]; then
+  sudo apt-get install curl -y
+fi
+WGET=$(which wget)
+if [ $? == 1 ]; then
+  sudo apt-get install wget -y
+fi
+UNZIP=$(which unzip)
+if [ $? == 1 ]; then
+  sudo apt-get install unzip -y
+fi
+COMPOSER=$(which composer)
+if [ $? == 1 ]; then
+  curl -sS https://getcomposer.org/installer | php
+  sudo mv composer.phar /usr/local/bin/composer
+fi
+if [ ! -d drush5 ]; then
+  wget https://github.com/drush-ops/drush/archive/5.10.0.zip
+  unzip 5.10.0.zip
+  mv drush-5.10.0 drush5
+fi
+if [ ! -d drush6 ]; then
+  mkdir drush6
+  cd drush6
+  composer require drush/drush:6.*
+  cd
+fi
+if [ ! -d drush7 ]; then
+  mkdir drush7
+  cd drush7
+  composer require drush/drush:7.*
+  cd
+fi
+if [ ! -d drush8 ]; then
+  mkdir drush8
+  cd drush8
+  composer require drush/drush:8.*
+  cd
+fi
+composer global require drush/drush:dev-master
+DRUSH5=$(grep 'alias drush5=' .bash_aliases)
+if [ -z $DRUSH5 ]; then
+cat << "EOF" >> .bash_aliases
+alias drush5=$HOME/drush5/drush
+EOF
+fi
+DRUSH6=$(grep 'alias drush6=' .bash_aliases)
+if [ -z $DRUSH6 ]; then
+cat << "EOF" >> .bash_aliases
+alias drush6=$HOME/drush6/vendor/bin/drush
+EOF
+fi
+DRUSH7=$(grep 'alias drush7=' .bash_aliases)
+if [ -z $DRUSH7 ]; then
+cat << "EOF" >> .bash_aliases
+alias drush7=$HOME/drush7/vendor/bin/drush
+EOF
+fi
+DRUSH8=$(grep 'alias drush8=' .bash_aliases)
+if [ -z $DRUSH8 ]; then
+cat << "EOF" >> .bash_aliases
+alias drush8=$HOME/drush8/vendor/bin/drush
+EOF
+fi
+$HOME/drush5/drush --version
+$HOME/drush6/vendor/bin/drush --version
+$HOME/drush7/vendor/bin/drush --version
+$HOME/drush8/vendor/bin/drush --version
+drush --version
+source .bashrc
