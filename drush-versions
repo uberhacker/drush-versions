@@ -25,6 +25,7 @@ if [ ! -d drush5 ]; then
   wget https://github.com/drush-ops/drush/archive/5.10.0.zip
   unzip 5.10.0.zip
   mv drush-5.10.0 drush5
+  rm -f 5.10.0.zip
 fi
 if [ ! -d drush6 ]; then
   mkdir drush6
@@ -44,6 +45,8 @@ if [ ! -d drush8 ]; then
   composer require drush/drush:8.*
   cd
 fi
+composer global require codegyre/robo ~1.0.0-beta1
+composer global require symfony/console ~2.7.9
 composer global require drush/drush:dev-master
 DRUSH5=$(grep 'alias drush5=' .bash_aliases)
 if [ -z $DRUSH5 ]; then
@@ -69,9 +72,10 @@ cat << "EOF" >> .bash_aliases
 alias drush8=$HOME/drush8/vendor/bin/drush
 EOF
 fi
+echo "export PATH=\"$HOME/.config/composer/vendor/bin:$HOME/.composer/vendor/bin:$PATH\"" >> .bashrc
+source .bashrc
 $HOME/drush5/drush --version
 $HOME/drush6/vendor/bin/drush --version
 $HOME/drush7/vendor/bin/drush --version
 $HOME/drush8/vendor/bin/drush --version
 drush --version
-source .bashrc
