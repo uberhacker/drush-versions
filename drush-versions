@@ -48,7 +48,7 @@ fi
 composer global require codegyre/robo ~1.0.0-beta1
 composer global require symfony/console ~2.7.9
 composer global require drush/drush:dev-master
-DRUSH5=$(grep 'alias drush5=' .bash_aliases)
+DRUSH5=$(grep 'alias drush5=' .bash_aliases 2> /dev/null)
 if [ -z $DRUSH5 ]; then
 cat << "EOF" >> .bash_aliases
 alias drush5=$HOME/drush5/drush
