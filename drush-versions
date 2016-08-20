@@ -1,5 +1,4 @@
 #!/bin/bash
-cd
 PHP=$(which php)
 if [ $? == 1 ]; then
   sudo apt-get install php5-cli -y
@@ -21,6 +20,38 @@ if [ $? == 1 ]; then
   curl -sS https://getcomposer.org/installer | php
   sudo mv composer.phar /usr/local/bin/composer
 fi
+if test $1; then
+  if [[ $1 == "up" || $1 == "update" ]]; then
+    if [ -d $HOME/drush6 ]; then
+      cd $HOME/drush6
+      composer update
+    else
+      echo "drush6 directory does not exist."
+    fi
+    if [ -d $HOME/drush7 ]; then
+      cd $HOME/drush7
+      composer update
+    else
+      echo "drush7 directory does not exist."
+    fi
+    if [ -d $HOME/drush8 ]; then
+      cd $HOME/drush8
+      composer update
+    else
+      echo "drush8 directory does not exist."
+    fi
+    if [ -d $HOME/.composer ]; then
+      composer global update drush/drush
+    fi
+    if [ -d $HOME/.config/composer ]; then
+      composer global update drush/drush
+    fi
+  else
+    echo "Usage: $0 [up|update]"
+  fi
+  exit 0
+fi
+cd
 if [ ! -d drush5 ]; then
   wget https://github.com/drush-ops/drush/archive/5.10.0.zip
   unzip 5.10.0.zip
@@ -45,8 +76,9 @@ if [ ! -d drush8 ]; then
   composer require drush/drush:8.*
   cd
 fi
-composer global require codegyre/robo ~1.0.0-beta1
-composer global require symfony/console ~2.7.9
+composer global require consolidation/robo:dev-master
+composer global require symfony/console:2.7.*
+composer global require symfony/event-dispatcher:2.7.*
 composer global require drush/drush:dev-master
 DRUSH5=$(grep 'alias drush5=' .bash_aliases 2> /dev/null)
 if [ -z $DRUSH5 ]; then
