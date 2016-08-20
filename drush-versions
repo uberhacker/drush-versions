@@ -1,19 +1,23 @@
 #!/bin/bash
+PM=apt-get
+if [ -f /etc/redhat-release ]; then
+  PM=yum
+fi
 PHP=$(which php)
 if [ $? == 1 ]; then
-  sudo apt-get install php5-cli -y
+  sudo $PM install php-cli -y
 fi
 CURL=$(which curl)
 if [ $? == 1 ]; then
-  sudo apt-get install curl -y
+  sudo $PM install curl -y
 fi
 WGET=$(which wget)
 if [ $? == 1 ]; then
-  sudo apt-get install wget -y
+  sudo $PM install wget -y
 fi
 UNZIP=$(which unzip)
 if [ $? == 1 ]; then
-  sudo apt-get install unzip -y
+  sudo $PM install unzip -y
 fi
 COMPOSER=$(which composer)
 if [ $? == 1 ]; then
