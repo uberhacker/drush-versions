@@ -17,3 +17,9 @@ $ drush-versions/drush-versions
 **drush7** - Use for well-behaved Drupal 7 sites
 
 **drush8** - Use for Drupal 8 sites
+
+ **drush** - Latest dev-master version
+
+## Update:
+
+**drush-versions/drush-versions update** - Update drush to the latest versions
