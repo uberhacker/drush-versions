@@ -13,34 +13,34 @@ $ drush-versions
 
 ## Usage:
 
+For Drupal 6 sites:
 ```
 $ drush5
 ```
-Use for Drupal 6 sites
 
+For stubborn Drupal 7 sites:
 ```
 $ drush6
 ```
-Use for stubborn Drupal 7 sites
 
+For well-behaved Drupal 7 sites:
 ```
 $ drush7
 ```
-Use for well-behaved Drupal 7 sites
 
+For Drupal 8 sites:
 ```
 $ drush8
 ```
-Use for Drupal 8 sites
 
+Latest dev-master version:
 ```
 $ drush
 ```
-Latest dev-master version
 
 ## Update:
 
+Update drush to the latest versions:
 ```
 $ drush-versions update
 ```
-Update drush to the latest versions
