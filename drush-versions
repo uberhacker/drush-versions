@@ -80,10 +80,8 @@ if [ ! -d drush8 ]; then
   composer require drush/drush:8.*
   cd
 fi
-composer global require consolidation/robo:dev-master
-composer global require symfony/console:2.7.*
-composer global require symfony/event-dispatcher:2.7.*
-composer global require drush/drush:dev-master
+composer global require drush/drush:^9.0.0-alpha1
+composer global require drush/config-extra
 DRUSH5=$(grep 'alias drush5=' .bash_aliases 2> /dev/null)
 if [ -z $DRUSH5 ]; then
 cat << "EOF" >> .bash_aliases
