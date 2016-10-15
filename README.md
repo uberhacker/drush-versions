@@ -8,10 +8,16 @@ $ cd drush-versions
 $ chmod +x drush-versions
 $ sudo mv drush-versions /usr/local/bin
 $ drush-versions
+$ source ~/.bashrc
 ```
 *Currently, this script works only in Debian/Ubuntu/RedHat/CentOS and derivative Linux distros.*
 
 ## Usage:
+```
+$ drush-versions [up|update|-d #|--default #]
+```
+
+## Examples:
 
 For Drupal 6 sites:
 ```
@@ -33,7 +39,12 @@ For Drupal 8 sites:
 $ drush8
 ```
 
-Latest dev-master version:
+For bleeding-edge Drupal 8 sites:
+```
+$ drush9
+```
+
+Default version:
 ```
 $ drush
 ```
@@ -43,4 +54,12 @@ $ drush
 Update drush to the latest versions:
 ```
 $ drush-versions update
+```
+
+## Change:
+
+Change the default to drush version 6:
+```
+$ drush-versions --default 6
+$ source ~/.bashrc
 ```
