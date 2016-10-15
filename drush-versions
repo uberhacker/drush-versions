@@ -24,7 +24,44 @@ if [ $? == 1 ]; then
   curl -sS https://getcomposer.org/installer | php
   sudo mv composer.phar /usr/local/bin/composer
 fi
+DEFAULT=9
+VALID_VERSIONS="5 6 7 8 9"
 if test $1; then
+  VALID=
+  VALID_COMMANDS="up update -d --default"
+  for C in $VALID_COMMANDS; do
+    if [ $C == $1 ]; then
+      VALID=1
+    fi
+  done
+  if [ -z $VALID ]; then
+    echo "Usage: $0 [up|update|-d #|--default #]"
+    exit 1
+  fi
+  if [[ $1 == "-d" || $1 == "--default" ]]; then
+    DEFAULT=
+    for V in $VALID_VERSIONS; do
+      if [ $V == $2 ]; then
+        DEFAULT=$2
+      fi
+    done
+  fi
+  if [ -z $DEFAULT ]; then
+    echo "Invalid default version.  Valid values are $VALID_VERSIONS."
+    exit 1
+  else
+    cd
+    DRUSH=$(grep 'alias drush=' .bash_aliases 2> /dev/null)
+    if [ -z "$DRUSH" ]; then
+      echo "alias drush=\$HOME/drush$DEFAULT/vendor/bin/drush" >> .bash_aliases
+    else
+      for V in $VALID_VERSIONS; do
+        sed -i "s,alias drush=\$HOME/drush$V,alias drush=\$HOME/drush$DEFAULT,g" .bash_aliases
+      done
+    fi
+    echo "Default:"
+    $HOME/drush$DEFAULT/vendor/bin/drush --version
+  fi
   if [[ $1 == "up" || $1 == "update" ]]; then
     if [ -d $HOME/drush6 ]; then
       cd $HOME/drush6
@@ -44,14 +81,12 @@ if test $1; then
     else
       echo "drush8 directory does not exist."
     fi
-    if [ -d $HOME/.composer ]; then
-      composer global update drush/drush
+    if [ -d $HOME/drush9 ]; then
+      cd $HOME/drush9
+      composer update
+    else
+      echo "drush9 directory does not exist."
     fi
-    if [ -d $HOME/.config/composer ]; then
-      composer global update drush/drush
-    fi
-  else
-    echo "Usage: $0 [up|update]"
   fi
   exit 0
 fi
@@ -59,7 +94,8 @@ cd
 if [ ! -d drush5 ]; then
   wget https://github.com/drush-ops/drush/archive/5.10.0.zip
   unzip 5.10.0.zip
-  mv drush-5.10.0 drush5
+  mkdir -p drush5/vendor
+  mv drush-5.10.0 drush5/vendor/bin
   rm -f 5.10.0.zip
 fi
 if [ ! -d drush6 ]; then
@@ -80,36 +116,36 @@ if [ ! -d drush8 ]; then
   composer require drush/drush:8.*
   cd
 fi
-composer global require drush/drush:^9.0.0-alpha1
-composer global require drush/config-extra
+if [ ! -d drush9 ]; then
+  mkdir drush9
+  cd drush9
+  composer require drush/drush:9.0.0-alpha1
+  cd
+fi
 DRUSH5=$(grep 'alias drush5=' .bash_aliases 2> /dev/null)
-if [ -z $DRUSH5 ]; then
-cat << "EOF" >> .bash_aliases
-alias drush5=$HOME/drush5/drush
-EOF
+if [ -z "$DRUSH5" ]; then
+  echo "alias drush5=\$HOME/drush5/drush" >> .bash_aliases
 fi
-DRUSH6=$(grep 'alias drush6=' .bash_aliases)
-if [ -z $DRUSH6 ]; then
-cat << "EOF" >> .bash_aliases
-alias drush6=$HOME/drush6/vendor/bin/drush
-EOF
+DRUSH6=$(grep 'alias drush6=' .bash_aliases 2> /dev/null)
+if [ -z "$DRUSH6" ]; then
+  echo "alias drush6=\$HOME/drush6/vendor/bin/drush" >> .bash_aliases
 fi
-DRUSH7=$(grep 'alias drush7=' .bash_aliases)
-if [ -z $DRUSH7 ]; then
-cat << "EOF" >> .bash_aliases
-alias drush7=$HOME/drush7/vendor/bin/drush
-EOF
+DRUSH7=$(grep 'alias drush7=' .bash_aliases 2> /dev/null)
+if [ -z "$DRUSH7" ]; then
+  echo "alias drush7=\$HOME/drush7/vendor/bin/drush" >> .bash_aliases
 fi
-DRUSH8=$(grep 'alias drush8=' .bash_aliases)
-if [ -z $DRUSH8 ]; then
-cat << "EOF" >> .bash_aliases
-alias drush8=$HOME/drush8/vendor/bin/drush
-EOF
+DRUSH8=$(grep 'alias drush8=' .bash_aliases 2> /dev/null)
+if [ -z "$DRUSH8" ]; then
+  echo "alias drush8=\$HOME/drush8/vendor/bin/drush" >> .bash_aliases
 fi
-echo "export PATH=\"$HOME/.config/composer/vendor/bin:$HOME/.composer/vendor/bin:$PATH\"" >> .bashrc
-source .bashrc
-$HOME/drush5/drush --version
+DRUSH9=$(grep 'alias drush9=' .bash_aliases 2> /dev/null)
+if [ -z "$DRUSH9" ]; then
+  echo "alias drush9=\$HOME/drush9/vendor/bin/drush" >> .bash_aliases
+fi
+$HOME/drush5/vendor/bin/drush --version
 $HOME/drush6/vendor/bin/drush --version
 $HOME/drush7/vendor/bin/drush --version
 $HOME/drush8/vendor/bin/drush --version
-drush --version
+$HOME/drush9/vendor/bin/drush --version
+echo "Default:"
+$HOME/drush$DEFAULT/vendor/bin/drush --version
