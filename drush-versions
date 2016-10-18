@@ -36,6 +36,7 @@ if test $1; then
   done
   if [ -z $VALID ]; then
     echo "Usage: $0 [up|update|-d #|--default #]"
+    echo "       Valid default values are $VALID_VERSIONS."
     exit 1
   fi
   if [[ $1 == "-d" || $1 == "--default" ]]; then
@@ -45,11 +46,10 @@ if test $1; then
         DEFAULT=$2
       fi
     done
-  fi
-  if [ -z $DEFAULT ]; then
-    echo "Invalid default version.  Valid values are $VALID_VERSIONS."
-    exit 1
-  else
+    if [ -z $DEFAULT ]; then
+      echo "Invalid default version.  Valid values are $VALID_VERSIONS."
+      exit 1
+    fi
     cd
     DRUSH=$(grep 'alias drush=' .bash_aliases 2> /dev/null)
     if [ -z "$DRUSH" ]; then
