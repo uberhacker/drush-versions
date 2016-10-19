@@ -142,6 +142,10 @@ DRUSH9=$(grep 'alias drush9=' .bash_aliases 2> /dev/null)
 if [ -z "$DRUSH9" ]; then
   echo "alias drush9=\$HOME/drush9/vendor/bin/drush" >> .bash_aliases
 fi
+DRUSH=$(grep 'alias drush=' .bash_aliases 2> /dev/null)
+if [ -z "$DRUSH" ]; then
+  echo "alias drush=\$HOME/drush$DEFAULT/vendor/bin/drush" >> .bash_aliases
+fi
 $HOME/drush5/vendor/bin/drush --version
 $HOME/drush6/vendor/bin/drush --version
 $HOME/drush7/vendor/bin/drush --version
