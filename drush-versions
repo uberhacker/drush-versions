@@ -3,23 +3,23 @@ PM=apt-get
 if [ -f /etc/redhat-release ]; then
   PM=yum
 fi
-PHP=$(which php)
+PHP=$(command -v php)
 if [ $? == 1 ]; then
   sudo $PM install php-cli -y
 fi
-CURL=$(which curl)
+CURL=$(command -v curl)
 if [ $? == 1 ]; then
   sudo $PM install curl -y
 fi
-WGET=$(which wget)
+WGET=$(command -v wget)
 if [ $? == 1 ]; then
   sudo $PM install wget -y
 fi
-UNZIP=$(which unzip)
+UNZIP=$(command -v unzip)
 if [ $? == 1 ]; then
   sudo $PM install unzip -y
 fi
-COMPOSER=$(which composer)
+COMPOSER=$(command -v composer)
 if [ $? == 1 ]; then
   curl -sS https://getcomposer.org/installer | php
   sudo mv composer.phar /usr/local/bin/composer
@@ -51,16 +51,9 @@ if test $1; then
       exit 1
     fi
     cd
-    DRUSH=$(grep 'alias drush=' .bash_aliases 2> /dev/null)
-    if [ -z "$DRUSH" ]; then
-      echo "alias drush=\$HOME/drush$DEFAULT/vendor/bin/drush" >> .bash_aliases
-    else
-      for V in $VALID_VERSIONS; do
-        sed -i "s,alias drush=\$HOME/drush$V,alias drush=\$HOME/drush$DEFAULT,g" .bash_aliases
-      done
-    fi
+    sudo ln -fs /usr/local/bin/drush$DEFAULT /usr/local/bin/drush
     echo "Default:"
-    $HOME/drush$DEFAULT/vendor/bin/drush --version
+    drush --version
   fi
   if [[ $1 == "up" || $1 == "update" ]]; then
     if [ -d $HOME/drush6 ]; then
@@ -122,34 +115,26 @@ if [ ! -d drush9 ]; then
   composer require drush/drush:9.0.0-alpha1
   cd
 fi
-DRUSH5=$(grep 'alias drush5=' .bash_aliases 2> /dev/null)
-if [ -z "$DRUSH5" ]; then
-  echo "alias drush5=\$HOME/drush5/vendor/bin/drush" >> .bash_aliases
+if [ ! -h /usr/local/bin/drush5 ]; then
+  sudo ln -s $HOME/drush5/vendor/bin/drush /usr/local/bin/drush5
 fi
-DRUSH6=$(grep 'alias drush6=' .bash_aliases 2> /dev/null)
-if [ -z "$DRUSH6" ]; then
-  echo "alias drush6=\$HOME/drush6/vendor/bin/drush" >> .bash_aliases
+if [ ! -h /usr/local/bin/drush6 ]; then
+  sudo ln -s $HOME/drush6/vendor/bin/drush /usr/local/bin/drush6
 fi
-DRUSH7=$(grep 'alias drush7=' .bash_aliases 2> /dev/null)
-if [ -z "$DRUSH7" ]; then
-  echo "alias drush7=\$HOME/drush7/vendor/bin/drush" >> .bash_aliases
+if [ ! -h /usr/local/bin/drush7 ]; then
+  sudo ln -s $HOME/drush7/vendor/bin/drush /usr/local/bin/drush7
 fi
-DRUSH8=$(grep 'alias drush8=' .bash_aliases 2> /dev/null)
-if [ -z "$DRUSH8" ]; then
-  echo "alias drush8=\$HOME/drush8/vendor/bin/drush" >> .bash_aliases
+if [ ! -h /usr/local/bin/drush8 ]; then
+  sudo ln -s $HOME/drush8/vendor/bin/drush /usr/local/bin/drush8
 fi
-DRUSH9=$(grep 'alias drush9=' .bash_aliases 2> /dev/null)
-if [ -z "$DRUSH9" ]; then
-  echo "alias drush9=\$HOME/drush9/vendor/bin/drush" >> .bash_aliases
+if [ ! -h /usr/local/bin/drush9 ]; then
+  sudo ln -s $HOME/drush9/vendor/bin/drush /usr/local/bin/drush9
 fi
-DRUSH=$(grep 'alias drush=' .bash_aliases 2> /dev/null)
-if [ -z "$DRUSH" ]; then
-  echo "alias drush=\$HOME/drush$DEFAULT/vendor/bin/drush" >> .bash_aliases
-fi
-$HOME/drush5/vendor/bin/drush --version
-$HOME/drush6/vendor/bin/drush --version
-$HOME/drush7/vendor/bin/drush --version
-$HOME/drush8/vendor/bin/drush --version
-$HOME/drush9/vendor/bin/drush --version
+sudo ln -fs $HOME/drush$DEFAULT/vendor/bin/drush /usr/local/bin/drush
+drush5 --version
+drush6 --version
+drush7 --version
+drush8 --version
+drush9 --version
 echo "Default:"
-$HOME/drush$DEFAULT/vendor/bin/drush --version
+drush --version
