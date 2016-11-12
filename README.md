@@ -8,7 +8,6 @@ $ cd drush-versions
 $ chmod +x drush-versions
 $ sudo mv drush-versions /usr/local/bin
 $ drush-versions
-$ source ~/.bashrc
 ```
 *Currently, this script works only in Debian/Ubuntu/RedHat/CentOS and derivative Linux distros.*
 
@@ -61,5 +60,4 @@ $ drush-versions update
 Change the default to drush version 6:
 ```
 $ drush-versions --default 6
-$ source ~/.bashrc
 ```
