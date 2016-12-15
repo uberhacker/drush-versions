@@ -18,6 +18,11 @@ $ drush-versions [up|update|-d #|--default #]
 
 ## Examples:
 
+For Drupal 5 sites:
+```
+$ drush4
+```
+
 For Drupal 6 sites:
 ```
 $ drush5
