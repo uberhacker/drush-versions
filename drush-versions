@@ -119,7 +119,8 @@ fi
 if [ ! -d drush9 ]; then
   mkdir drush9
   cd drush9
-  composer require drush/drush:9.0.0-alpha1
+  composer config minimum-stability beta
+  composer require drush/drush:9.*
   cd
 fi
 if [ ! -h /usr/local/bin/drush4 ]; then
