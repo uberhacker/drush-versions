@@ -13,7 +13,7 @@ $ drush-versions
 
 ## Usage:
 ```
-$ drush-versions [up|update|-d #|--default #]
+$ drush-versions [up|update|un|uninstall|-d #|--default #]
 ```
 
 ## Examples:
@@ -65,4 +65,10 @@ $ drush-versions update
 Change the default to drush version 6:
 ```
 $ drush-versions --default 6
+```
+
+## Uninstall:
+
+```
+$ drush-versions uninstall
 ```
