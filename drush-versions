@@ -28,14 +28,14 @@ DEFAULT=9
 VALID_VERSIONS="4 5 6 7 8 9"
 if test $1; then
   VALID=
-  VALID_COMMANDS="up update -d --default"
+  VALID_COMMANDS="up update un uninstall -d --default"
   for C in $VALID_COMMANDS; do
     if [ $C == $1 ]; then
       VALID=1
     fi
   done
   if [ -z $VALID ]; then
-    echo "Usage: $0 [up|update|-d #|--default #]"
+    echo "Usage: $0 [up|update|un|uninstall|-d #|--default #]"
     echo "       Valid default values are $VALID_VERSIONS."
     exit 1
   fi
@@ -81,6 +81,18 @@ if test $1; then
       echo "drush9 directory does not exist."
     fi
   fi
+  if [[ $1 == "un" || $1 == "uninstall" ]]; then
+    cd
+    rm -rf drush4/ drush5/ drush6/ drush7/ drush8/ drush9/
+    cd /usr/local/bin
+    sudo rm drush drush4 drush5 drush6 drush7 drush8 drush9
+    if [ -h /usr/local/bin/drush ]; then
+      echo "drush-versions was not uninstalled successfully."
+    else
+      echo "drush-versions was uninstalled successfully."
+    fi
+    cd
+  fi
   exit 0
 fi
 cd
@@ -119,6 +131,7 @@ fi
 if [ ! -d drush9 ]; then
   mkdir drush9
   cd drush9
+  composer init -n
   composer config minimum-stability beta
   composer require drush/drush:9.*
   cd
