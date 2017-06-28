@@ -53,7 +53,11 @@ if test $1; then
     cd
     sudo ln -fs /usr/local/bin/drush$DEFAULT /usr/local/bin/drush
     echo "Default:"
-    drush --version
+    if [ $DEFAULT == 9 ]; then
+      drush version
+    else
+      drush --version
+    fi
   fi
   if [[ $1 == "up" || $1 == "update" ]]; then
     if [ -d $HOME/drush6 ]; then
@@ -160,6 +164,11 @@ drush5 --version
 drush6 --version
 drush7 --version
 drush8 --version
-drush9 --version
+drush9 version
 echo "Default:"
-drush --version
+DRUSH_DEFAULT=$(readlink -f $(command -v drush))
+if [[ $DRUSH_DEFAULT == *"drush9"* ]]; then
+  drush version
+else
+  drush --version
+fi
