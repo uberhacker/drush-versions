@@ -136,7 +136,7 @@ if [ ! -d drush9 ]; then
   mkdir drush9
   cd drush9
   composer init -n
-  composer config minimum-stability beta
+  composer config minimum-stability stable
   composer require drush/drush:9.*
   cd
 fi
