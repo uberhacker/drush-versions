@@ -25,7 +25,7 @@ if [ $? == 1 ]; then
   sudo mv composer.phar /usr/local/bin/composer
 fi
 DEFAULT=9
-VALID_VERSIONS="4 5 6 7 8 9"
+VALID_VERSIONS="4 5 6 7 8 9 10"
 if test $1; then
   VALID=
   VALID_COMMANDS="up update un uninstall -d --default"
@@ -84,12 +84,18 @@ if test $1; then
     else
       echo "drush9 directory does not exist."
     fi
+    if [ -d $HOME/drush10 ]; then
+      cd $HOME/drush10
+      composer update
+    else
+      echo "drush10 directory does not exist."
+    fi
   fi
   if [[ $1 == "un" || $1 == "uninstall" ]]; then
     cd
-    rm -rf drush4/ drush5/ drush6/ drush7/ drush8/ drush9/
+    rm -rf drush4/ drush5/ drush6/ drush7/ drush8/ drush9/ drush10/
     cd /usr/local/bin
-    sudo rm drush drush4 drush5 drush6 drush7 drush8 drush9
+    sudo rm drush drush4 drush5 drush6 drush7 drush8 drush9 drush10
     if [ -h /usr/local/bin/drush ]; then
       echo "drush-versions was not uninstalled successfully."
     else
@@ -140,6 +146,14 @@ if [ ! -d drush9 ]; then
   composer require drush/drush:9.*
   cd
 fi
+if [ ! -d drush10 ]; then
+  mkdir drush10
+  cd drush10
+  composer init -n
+  composer config minimum-stability stable
+  composer require drush/drush:10.*
+  cd
+fi
 if [ ! -h /usr/local/bin/drush4 ]; then
   sudo ln -s $HOME/drush4/vendor/bin/drush /usr/local/bin/drush4
 fi
@@ -158,6 +172,9 @@ fi
 if [ ! -h /usr/local/bin/drush9 ]; then
   sudo ln -s $HOME/drush9/vendor/bin/drush /usr/local/bin/drush9
 fi
+if [ ! -h /usr/local/bin/drush10 ]; then
+  sudo ln -s $HOME/drush10/vendor/bin/drush /usr/local/bin/drush10
+fi
 sudo ln -fs $HOME/drush$DEFAULT/vendor/bin/drush /usr/local/bin/drush
 drush4 --version
 drush5 --version
@@ -165,9 +182,10 @@ drush6 --version
 drush7 --version
 drush8 --version
 drush9 version
+drush10 version
 echo "Default:"
 DRUSH_DEFAULT=$(readlink -f $(command -v drush))
-if [[ $DRUSH_DEFAULT == *"drush9"* ]]; then
+if [[ $DRUSH_DEFAULT == *"drush10"* ]]; then
   drush version
 else
   drush --version
